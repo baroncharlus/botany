@@ -40,7 +40,7 @@ class CursedMenu(object):
         screen_thread.daemon = True
         screen_thread.start()
         self.screen.clear()
-        self.show(["water","look","garden","instructions"], title=' botany ', subtitle='options')
+        self.show(["water","tend","look","garden","instructions"], title=' botany ', subtitle='options')
 
     def define_colors(self):
         # set curses color pairs manually
@@ -452,7 +452,7 @@ class CursedMenu(object):
             # get plant description before printing
             output_string = self.get_plant_description(this_plant)
             growth_multiplier = 1 + (0.2 * (this_plant.generation-1))
-            output_string += "Generation: {}\nGrowth rate: {}".format(self.plant.generation, growth_multiplier)
+            output_string += "Name: {}\nGeneration: {}\nGrowth rate: {}".format(this_plant.name, self.plant.generation, growth_multiplier)
             self.draw_info_text(output_string)
             self.infotoggle = 1
         else:
@@ -523,6 +523,8 @@ class CursedMenu(object):
             self.harvest_confirmation()
         if request == "water":
             self.plant.water()
+        if request == 'tend":
+            self.plant.configure()
         if request == "look":
             try:
                 self.draw_plant_description(self.plant)

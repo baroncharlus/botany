@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 
 from __future__ import division
 import time
@@ -137,6 +137,7 @@ class Plant(object):
         self.generation = generation
         self.dead = False
         self.write_lock = False
+        self.name = 'bill'
         self.owner = getpass.getuser()
         self.file_name = this_filename
         self.start_time = int(time.time())
@@ -399,6 +400,7 @@ class DataManager(object):
         conn = sqlite3.connect(self.garden_db_path)
         init_table_string = """CREATE TABLE IF NOT EXISTS garden (
         plant_id tinytext PRIMARY KEY,
+        name text,
         owner text,
         description text,
         age text,
@@ -426,11 +428,12 @@ class DataManager(object):
         c = conn.cursor()
         # try to insert or replace
         update_query = """INSERT OR REPLACE INTO garden (
-                    plant_id, owner, description, age, score, is_dead
+                    plant_id, name, owner, description, age, score, is_dead
                     ) VALUES (
-                    '{pid}', '{pown}', '{pdes}', '{page}', {psco}, {pdead}
+                    '{pid}', '{pnam}', '{pown}', '{pdes}', '{page}', {psco}, {pdead}
                     )
                     """.format(pid = this_plant.plant_id,
+                            pnam = this_plant.name,
                             pown = this_plant.owner,
                             pdes = this_plant.parse_plant(),
                             page = age_formatted,
@@ -453,11 +456,12 @@ class DataManager(object):
         # Building dict from table rows
         for item in tuple_list:
             garden_dict[item[0]] = {
-                "owner":item[1],
-                "description":item[2],
-                "age":item[3],
-                "score":item[4],
-                "dead":item[5],
+                "name":item[1],
+                "owner":item[2],
+                "description":item[3],
+                "age":item[4],
+                "score":item[5],
+                "dead":item[6],
             }
         return garden_dict
 
@@ -479,6 +483,7 @@ class DataManager(object):
         # also updates age
         age_formatted = self.plant_age_convert(this_plant)
         plant_info = {
+                "name":this_plant.name,
                 "owner":this_plant.owner,
                 "description":this_plant.parse_plant(),
                 "age":age_formatted,
