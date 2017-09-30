@@ -262,6 +262,13 @@ class CursedMenu(object):
         self.selected = self.selected % len(self.options)
         return
 
+    def my_raw_input(stdscr, r, c):
+    	curses.echo() 
+    	stdscr.addstr(r, c)
+    	stdscr.refresh()
+    	input = stdscr.getstr(r + 1, c, 20)
+    	return input  
+
     def format_garden_data(self,this_garden):
         # Returns list of lists (pages) of garden entries
         plant_table = ""
@@ -516,6 +523,16 @@ class CursedMenu(object):
             pass
         self.clear_info_pane()
 
+    def configure(self):
+        self.clear_info_pane()
+        name_text = "Give your plant a name!\n"
+        name_text += "Enter Name:"
+        try:
+            user_in = self.my_raw_input() # Gets user input
+            self.plant.name = user_in
+        except Exception as e:
+            self.__exit__()
+
     def handle_request(self, request):
         # Menu options call functions here
         if request == None: return
@@ -523,8 +540,8 @@ class CursedMenu(object):
             self.harvest_confirmation()
         if request == "water":
             self.plant.water()
-        if request == 'tend":
-            self.plant.configure()
+        if request == "tend":
+            self.configure()
         if request == "look":
             try:
                 self.draw_plant_description(self.plant)

@@ -137,7 +137,7 @@ class Plant(object):
         self.generation = generation
         self.dead = False
         self.write_lock = False
-        self.name = 'bill'
+        self.name = '' 
         self.owner = getpass.getuser()
         self.file_name = this_filename
         self.start_time = int(time.time())
