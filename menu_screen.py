@@ -527,8 +527,9 @@ class CursedMenu(object):
         self.clear_info_pane()
         name_text = "Give your plant a name!\n"
         name_text += "Enter Name:"
+        self.draw_info_text(name_text)
         try:
-            user_in = self.my_raw_input() # Gets user input
+            user_in = self.my_raw_input() 
             self.plant.name = user_in
         except Exception as e:
             self.__exit__()
