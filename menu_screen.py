@@ -262,13 +262,6 @@ class CursedMenu(object):
         self.selected = self.selected % len(self.options)
         return
 
-    def my_raw_input(stdscr, r, c):
-    	curses.echo() 
-    	stdscr.addstr(r, c)
-    	stdscr.refresh()
-    	input = stdscr.getstr(r + 1, c, 20)
-    	return input  
-
     def format_garden_data(self,this_garden):
         # Returns list of lists (pages) of garden entries
         plant_table = ""
@@ -529,10 +522,12 @@ class CursedMenu(object):
         name_text += "Enter Name:"
         self.draw_info_text(name_text)
         try:
-            user_in = self.my_raw_input() 
+            curses.echo()
+            user_in = self.screen.getstr(0,0,15)
             self.plant.name = user_in
         except Exception as e:
             self.__exit__()
+
 
     def handle_request(self, request):
         # Menu options call functions here
